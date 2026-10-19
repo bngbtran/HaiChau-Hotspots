@@ -1,9 +1,0 @@
-﻿step,n_before,n_after,n_affected,note
-"2. Chuẩn hóa chuỗi (NFC, strip, khoảng trắng)",3256,3256,118,storeName=34; district=14; address=93
-3. Chuẩn hóa district,3256,3256,2238,20 biến thể -> 1 giá trị chuẩn; 12 bản ghi bị đánh cờ ngoài Hải Châu
-"4. Tách phường (ward_name, ward_addr, ward_final)",3256,3256,1341,tỉ lệ khớp 2 nguồn 48.5%; ưu tiên phường trong address
-5. Loại tọa độ ngoài bbox+1km & quận khác,3256,3240,16,ngoài bbox: 6; quận/tỉnh khác (trong bbox): 10
-6. Tách productType đa nhãn,3240,3240,212,51 nhãn gốc -> 20 nhãn; 53 bản ghi có huy hiệu Grab
-"7. flag -> rating, has_rating (giả định)",3240,3240,1568,rating = flag/10; flag=0 -> NaN (chưa có đánh giá)
-8. Khử trùng listing,3240,3208,32,"64 listing thuộc nhóm trùng; gộp product_types, rating TB"
-"9. Phát hiện chain (brand, is_chain)",3208,3208,705,274 brand có ≥2 địa điểm
