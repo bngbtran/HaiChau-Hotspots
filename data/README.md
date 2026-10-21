@@ -26,14 +26,24 @@ Script gộp tự kiểm tra: `storeId` không có trong file gốc, một quán
 ## Nạp dữ liệu mới cho web
 
 ```
+# Windows
 D:\LIBRARY\MINICONDA\Conda\envs\msa\python.exe scripts/update_web.py
+# macOS
+/opt/miniconda3/envs/msa/bin/python scripts/update_web.py
+```
+
+Lần đầu trên máy mới: cài `openpyxl` và đăng ký kernel `msa` cho Jupyter (script chạy notebook bằng kernel này):
+
+```
+<python của msa> -m pip install openpyxl
+<python của msa> -m ipykernel install --user --name msa --display-name "Python (msa)"
 ```
 
 Lệnh này gộp `crawl/parts/*.xlsx` → chạy lại notebook → ghi `web/areas.json`. Sau đó:
 
 - **Live Server:** tải lại trang.
 - **Vercel:** deploy lại cả thư mục dự án (web cần `index.html` và `data/web/areas.json`).
-- **Mở thử file JSON khác:** bấm *Nạp dữ liệu* trên web.
+- **Mở thử file JSON khác:** trên web mở menu tài khoản (góc phải trên) → *Nạp dữ liệu*.
 
 Thêm hoặc bớt quán trong danh sách gốc: cập nhật `DaNangData_full.xlsm` (giữ nguyên tên cột), rồi chạy lại lệnh trên.
 
