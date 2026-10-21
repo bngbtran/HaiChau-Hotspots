@@ -12,7 +12,19 @@
 
 Notebook đọc `crawl/` nếu có `prices.csv` / `reviews.csv`, nếu không thì dùng `sim/`. Không trộn giả lập với dữ liệu thật: quán chưa crawl được sẽ để trống giá trên web.
 
-## Quy trình crawl cho 3 thành viên
+## Crawl tự động bằng bot Google Maps (khuyến nghị)
+
+Bot `tools/gmaps-bot/` tự tìm từng quán trên Google Maps và lấy đánh giá, số lượt đánh giá, khoảng giá (nếu Google hiển thị), toạ độ mới, loại quán, bình luận. Hướng dẫn cho thành viên: [tools/gmaps-bot/HUONG_DAN.md](../tools/gmaps-bot/HUONG_DAN.md).
+
+1. Gửi cho mỗi thành viên file `HaiChau-crawl-bot.zip` (bot + nút `CHAY_BOT` / `DANG_NHAP` + hướng dẫn) cùng file Excel phân công của họ.
+2. Thành viên bấm `DANG_NHAP` (một lần), chép file phân công vào `input/`, bấm `CHAY_BOT`, rồi gửi lại `output/<tên file>_ketqua.xlsx`
+   (bảng phân công giữ nguyên cột + Vĩ độ mới, Kinh độ mới, Đánh giá, Số đánh giá, Giá thấp/cao nhất…; sheet "Bình luận").
+3. Nhóm trưởng chép các file `*_ketqua.xlsx` vào `data/crawl/parts/` rồi chạy `scripts/update_web.py`:
+   giá → `crawl/prices.csv`, bình luận → `crawl/reviews.csv`, đánh giá tổng + toạ độ mới → `crawl/places.csv`; notebook dùng toạ độ mới và đánh giá Google cho các quán khớp.
+
+Quán `Cần kiểm tra` (tên/vị trí lệch) và `Không tìm thấy` không được dùng; có thể sửa tay trong file Excel (điền cột và đổi `Trạng thái` thành `Done`).
+
+## Quy trình crawl cho 3 thành viên (nhập tay)
 
 1. Mỗi người giữ bảng quán được giao (sheet đầu tiên), **không sửa cột `storeId`**. Đây là khoá để gộp.
 2. Thêm 4 cột vào bảng đó: `Trạng thái`, `Giá thấp nhất`, `Giá cao nhất`, `Nguồn` (xem `crawl/MAU_crawl.xlsx`).

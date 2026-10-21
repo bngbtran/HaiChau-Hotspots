@@ -7,6 +7,9 @@ Mỗi thành viên nộp MỘT file Excel vào data/crawl/parts/ (ví dụ parts
     - Trạng thái: Not Yet / Done / Không tìm thấy / Đóng cửa
     - Giá: số (30000) hoặc chữ ("30.000đ", "30k"); có thể ghi cả khoảng "30.000 - 50.000đ" vào cột "Giá thấp nhất"
 
+  Cột tuỳ chọn (Google Maps): Đánh giá | Số đánh giá | Vĩ độ mới | Kinh độ mới | Mức giá | place_id
+    → ghi data/crawl/places.csv; notebook dùng toạ độ mới và đánh giá tổng thay cho dữ liệu cũ.
+
   Sheet "Bình luận" (mỗi bình luận một dòng):
     storeId | Số sao | Bình luận | Ngày | Nguồn
 
@@ -30,7 +33,11 @@ STATUS_DONE = "done"
 STORE_COLS = {"storeid": "storeId", "trạng thái": "status", "trang thai": "status", "status": "status",
               "giá thấp nhất": "price_min", "gia thap nhat": "price_min", "price_min": "price_min", "giá": "price_min",
               "giá cao nhất": "price_max", "gia cao nhat": "price_max", "price_max": "price_max",
-              "nguồn": "source", "nguon": "source", "source": "source"}
+              "nguồn": "source", "nguon": "source", "source": "source",
+              # thông tin Google Maps (công cụ crawl_places_api.py hoặc nhập tay)
+              "đánh giá": "g_rating", "danh gia": "g_rating", "số đánh giá": "g_count", "so danh gia": "g_count",
+              "vĩ độ mới": "lat", "vi do moi": "lat", "kinh độ mới": "lng", "kinh do moi": "lng",
+              "mức giá": "price_level", "muc gia": "price_level", "place_id": "place_id"}
 REVIEW_COLS = {"storeid": "storeId", "số sao": "rating", "so sao": "rating", "rating": "rating", "sao": "rating",
                "bình luận": "comment", "binh luan": "comment", "comment": "comment",
                "ngày": "created_at", "ngay": "created_at", "created_at": "created_at", "nguồn": "source", "nguon": "source", "source": "source"}
@@ -84,7 +91,7 @@ def main():
     if not files:
         sys.exit(f"Không có file .xlsx nào trong {args.parts}")
     master = load_master()
-    warns, P, R, progress = [], [], [], []
+    warns, P, R, G, progress = [], [], [], [], []
 
     for f in files:
         who = f.stem
@@ -103,6 +110,18 @@ def main():
         stores = stores[stores.storeId.isin(master)]  # storeId lạ: chỉ cảnh báo, không đưa vào kết quả
 
         for _, r in stores.iterrows():
+            # Google Maps: đánh giá tổng, số lượt, toạ độ mới (bỏ toạ độ nằm ngoài Đà Nẵng)
+            g_rating, g_count = pd.to_numeric(r.get("g_rating"), errors="coerce"), pd.to_numeric(r.get("g_count"), errors="coerce")
+            lat, lng = pd.to_numeric(r.get("lat"), errors="coerce"), pd.to_numeric(r.get("lng"), errors="coerce")
+            if pd.notna(lat) and not (15.9 <= lat <= 16.2 and 108.0 <= lng <= 108.4):
+                warns.append(f"[{who}] {r.storeId}: toạ độ mới ngoài Đà Nẵng ({lat}, {lng})"); lat = lng = float("nan")
+            if pd.notna(g_rating) and not 1 <= g_rating <= 5:
+                warns.append(f"[{who}] {r.storeId}: đánh giá không hợp lệ ({r.get('g_rating')})"); g_rating = float("nan")
+            if pd.notna(g_rating) or pd.notna(lat):
+                G.append({"storeId": r.storeId, "rating": g_rating, "rating_count": g_count, "price_level": r.get("price_level") if pd.notna(r.get("price_level")) else "",
+                          "lat": lat, "lng": lng, "place_id": r.get("place_id") if pd.notna(r.get("place_id")) else "",
+                          "source": r.get("source") if pd.notna(r.get("source")) else who, "member": who,
+                          "done": str(r.get("status", "")).strip().lower() == STATUS_DONE})
             if "price_min" not in stores or pd.isna(r.get("price_min")):
                 continue
             lo, hi = split_range(r["price_min"])
@@ -144,7 +163,12 @@ def main():
             warns.append(f"Bỏ {n0 - len(reviews)} bình luận trùng (cùng quán, cùng nội dung)")
         reviews["review_id"] = reviews.storeId + "-R" + (reviews.groupby("storeId").cumcount() + 1).astype(str).str.zfill(2)
 
+    places = pd.DataFrame(G)
+    if len(places):
+        places = places.sort_values("done", ascending=False).drop_duplicates("storeId")
+
     args.out.mkdir(parents=True, exist_ok=True)
+    places.reindex(columns=["storeId", "rating", "rating_count", "price_level", "lat", "lng", "place_id", "source"]).to_csv(args.out / "places.csv", index=False, encoding="utf-8-sig")
     prices.reindex(columns=["storeId", "price_min", "price_max", "source"]).to_csv(args.out / "prices.csv", index=False, encoding="utf-8-sig")
     reviews.reindex(columns=["storeId", "review_id", "rating", "comment", "created_at", "source"]).to_csv(args.out / "reviews.csv", index=False, encoding="utf-8-sig")
 
@@ -152,6 +176,7 @@ def main():
     table = pd.DataFrame(progress).fillna(0)
     print(table.astype({c: int for c in table.columns if c != "thành viên"}).to_string(index=False))
     print(f"\nĐã ghi {args.out / 'prices.csv'}: {len(prices)} quán có giá / {len(master)} quán trong file gốc")
+    print(f"Đã ghi {args.out / 'places.csv'}: {len(places)} quán có đánh giá / toạ độ mới từ Google Maps")
     print(f"Đã ghi {args.out / 'reviews.csv'}: {len(reviews)} bình luận cho {reviews.storeId.nunique() if len(reviews) else 0} quán")
     if warns:
         print(f"\nCẢNH BÁO ({len(warns)}):")

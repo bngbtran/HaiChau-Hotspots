@@ -1,0 +1,6 @@
+node_modules/
+tools/gmaps-bot/.profile/
+.DS_Store
+tools/gmaps-bot/input/*.xlsx
+tools/gmaps-bot/output/*
+!tools/gmaps-bot/output/.gitkeep
