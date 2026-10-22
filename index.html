@@ -669,20 +669,25 @@ const mPerLng = (lat) => 111320 * Math.cos(lat * Math.PI / 180), M_PER_LAT = 110
 const zoneVisible = (z) => (typeFilter === "all" || z.t === +typeFilter) &&
   (sizeFilter === "all" || (sizeFilter === "s" ? z.km2 < .25 : sizeFilter === "m" ? z.km2 >= .25 && z.km2 <= .75 : z.km2 > .75));
 const visibleZoneIds = () => ZONES.filter(zoneVisible).map((z) => z.id);
-const hasBars = (z) => z.cells.length >= 3 && zoneVisible(z);
-// Cột 3D: mỗi vùng một dãy cột theo tỷ lệ loại hình trong vùng, bóng đổ elip dưới chân
+// Mọi vùng đang hiển thị đều có cột 3D; nhãn chỉ hiện cho vùng từ 3 ô để bản đồ không rối
+const hasBars = (z) => zoneVisible(z);
+const hasLabel = (z) => z.cells.length >= 3 && zoneVisible(z);
+// Cột 3D: mỗi vùng một dãy cột theo tỷ lệ loại hình trong vùng, bóng đổ elip dưới chân.
+// Chân cột thu nhỏ theo kích thước vùng (vùng 1 ô chỉ rộng 250 m) để dãy cột không tràn sang vùng bên cạnh;
+// chiều cao giữ nguyên công thức để so sánh tỷ lệ giữa các vùng.
 function buildBars() {
   const bars = [], shadows = [];
   for (const z of ZONES) {
     if (!hasBars(z) || !catsMap.length) continue;
-    const n = catsMap.length, w = 36, gap = 8, total = n * w + (n - 1) * gap, y0 = -70;
+    const s = Math.min(1, Math.max(.6, Math.sqrt(z.cells.length / 3)));
+    const n = catsMap.length, w = 36 * s, gap = 8 * s, total = n * w + (n - 1) * gap, y0 = -70 * s;
     const [lat, lng] = z.anchor, kx = mPerLng(lat), p = (dx, dy) => [lng + dx / kx, lat + dy / M_PER_LAT];
     catsMap.forEach((c, i) => {
       const share = z.total ? (z.cats[c] || 0) / z.total : 0, x0 = -total / 2 + i * (w + gap);
       bars.push({ type: "Feature", properties: { z: z.id, color: cColor(c), h: 12 + share * 800 },
         geometry: { type: "Polygon", coordinates: [[p(x0, y0), p(x0 + w, y0), p(x0 + w, y0 + w), p(x0, y0 + w), p(x0, y0)]] } });
     });
-    const rx = total / 2 + 34, ry = 64, ell = [];
+    const rx = total / 2 + 34 * s, ry = 64 * s, ell = [];
     for (let k = 0; k <= 48; k++) { const a = k / 48 * 2 * Math.PI; ell.push(p(rx * Math.cos(a), y0 + w / 2 + ry * Math.sin(a))); }
     shadows.push({ type: "Feature", properties: { z: z.id }, geometry: { type: "Polygon", coordinates: [ell] } });
   }
@@ -732,7 +737,7 @@ function setZoneState(z, key, val) { if (z != null && ZONES[z]) map.setFeatureSt
 function updateLabels() {
   if (!D || !labelsReady || !map.getSource("zlabels")) return;
   const show = $("t-labels").checked;
-  map.getSource("zlabels").setData({ type: "FeatureCollection", features: ZONES.filter((z) => (sel.kind === "zone" && sel.z === z.id) || (show && hasBars(z))).map((z) => {
+  map.getSource("zlabels").setData({ type: "FeatureCollection", features: ZONES.filter((z) => (sel.kind === "zone" && sel.z === z.id) || (show && hasLabel(z))).map((z) => {
     const isSel = sel.kind === "zone" && sel.z === z.id;
     return { type: "Feature", properties: { z: z.id, img: `zl-${z.id}${isSel ? "-s" : ""}`, rank: isSel ? -1 : 100 - z.cells.length },
       geometry: { type: "Point", coordinates: [z.anchor[1], z.anchor[0] + 40 / M_PER_LAT] } };
