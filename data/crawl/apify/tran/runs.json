@@ -1,0 +1,248 @@
+{
+ "Nhóm 2": {
+  "run_id": "dcp51VqTjApAIKbxG",
+  "dataset_id": "uJh050ivUETOzrs4D",
+  "status": "SUCCEEDED",
+  "places": 9,
+  "expected": 8000,
+  "got": 6970,
+  "usd": 4.1370499999999995
+ },
+ "Nhóm 2 (retry mostRelevant)": {
+  "run_id": "UElZ0R0Vbch8ELs92",
+  "dataset_id": "QGYsJAqtzYRWf6igI",
+  "status": "SUCCEEDED",
+  "places": 1,
+  "expected": 1035,
+  "got": 1035,
+  "usd": 0.42005
+ },
+ "Nhóm 7": {
+  "run_id": "x7la2N88UF4djMZP6",
+  "dataset_id": "up0FcnPBvL4G4UE70",
+  "status": "SUCCEEDED",
+  "places": 9,
+  "expected": 8000,
+  "got": 6980,
+  "usd": 4.179049999999999
+ },
+ "Nhóm 7 (retry mostRelevant)": {
+  "run_id": "hWNUEsMd9mFD8Os38",
+  "dataset_id": "pYuENwKDJegIEuO0f",
+  "status": "SUCCEEDED",
+  "places": 2,
+  "expected": 2070,
+  "got": 1272,
+  "usd": 0.38404999999999995
+ },
+ "Nhóm 7 (retry lowestRanking)": {
+  "run_id": "N7YxRCA4zcD2qlmQV",
+  "dataset_id": "RRRyLifuA8HFxIHS6",
+  "status": "SUCCEEDED",
+  "places": 1,
+  "expected": 1035,
+  "tok": 1,
+  "got": 295,
+  "usd": 0.048049999999999995
+ },
+ "Nhóm 7 (retry highestRanking)": {
+  "run_id": "GYM3Ea7WfbxPnyhrg",
+  "dataset_id": "ndHdNaFwyJX88TgYD",
+  "status": "SUCCEEDED",
+  "places": 1,
+  "expected": 1035,
+  "tok": 1,
+  "got": 295,
+  "usd": 0.09604999999999998
+ },
+ "Nhóm 7 (retry newest)": {
+  "run_id": "b3XX4URjcvxrQH7d6",
+  "dataset_id": "adv5tDCJ6raqrP1ld",
+  "status": "SUCCEEDED",
+  "places": 1,
+  "expected": 1035,
+  "tok": 1,
+  "got": 1035,
+  "usd": 0.43204999999999993
+ },
+ "Nhóm 10": {
+  "run_id": "JEgttTCVaeCgy7xVN",
+  "dataset_id": "2jcEQCVqJRAIjyvuc",
+  "status": "SUCCEEDED",
+  "places": 9,
+  "expected": 8000,
+  "tok": 0,
+  "got": 6616,
+  "usd": 3.8292499999999996
+ },
+ "Nhóm 10 (retry newest)": {
+  "run_id": "vVDLtRJeHcXkbACQW",
+  "dataset_id": "EW6aGvORlOPt1ZaeA",
+  "status": "SUCCEEDED",
+  "places": 4,
+  "expected": 4140,
+  "tok": 1,
+  "got": 4140,
+  "usd": 2.4150499999999995
+ },
+ "Nhóm 15": {
+  "run_id": "BeExmTuRWzf2ObzAp",
+  "dataset_id": "bTeFNZWSB6GF5u4vf",
+  "status": "SUCCEEDED",
+  "places": 9,
+  "expected": 8000,
+  "tok": 0,
+  "got": 7982,
+  "usd": 4.771249999999999
+ },
+ "Nhóm 18": {
+  "run_id": "u4cOpAY55U9fVHIsx",
+  "dataset_id": "tVDGp9HRcHU1O6XcU",
+  "status": "SUCCEEDED",
+  "places": 9,
+  "expected": 8000,
+  "tok": 0,
+  "got": 7999,
+  "usd": 4.7982499999999995
+ },
+ "Nhóm 18 (retry newest)": {
+  "run_id": "0WFCH58Rc37jsfw9Q",
+  "dataset_id": "6fqQZYufGtKmJQefF",
+  "status": "SUCCEEDED",
+  "places": 1,
+  "expected": 1035,
+  "tok": 1,
+  "got": 1035,
+  "usd": 0.5640499999999999
+ },
+ "Nhóm 23": {
+  "run_id": "prUwQnE3H47aGV0QV",
+  "dataset_id": "0DevlAcxJAWgXNPf8",
+  "status": "SUCCEEDED",
+  "places": 13,
+  "expected": 8000,
+  "tok": 0,
+  "got": 7999,
+  "usd": 4.79045
+ },
+ "Nhóm 23 (retry newest)": {
+  "run_id": "uQJ3gEF8t5IIrYs2Y",
+  "dataset_id": "iram9aog3ugiaZJDa",
+  "status": "SUCCEEDED",
+  "places": 1,
+  "expected": 646,
+  "tok": 1,
+  "got": 650,
+  "usd": 0.31205
+ },
+ "Nhóm 26": {
+  "run_id": "sxlMRDh0Eu06MG0Jc",
+  "dataset_id": "c7FSOcicJV6cznNDR",
+  "status": "SUCCEEDED",
+  "places": 16,
+  "expected": 8000,
+  "tok": 0,
+  "got": 7999,
+  "usd": 4.7856499999999995
+ },
+ "Nhóm 26 (retry newest)": {
+  "run_id": "iE52nXx4ig7ngsFvb",
+  "dataset_id": "lhKDzi3p7X2JreIY8",
+  "status": "SUCCEEDED",
+  "places": 2,
+  "expected": 1100,
+  "tok": 1,
+  "got": 1099,
+  "usd": 0.61625
+ },
+ "Nhóm 26 (retry mostRelevant)": {
+  "run_id": "ZwgRnIqlRXacGdFYj",
+  "dataset_id": "t6LLmNmQGz9UwuWEm",
+  "status": "SUCCEEDED",
+  "places": 1,
+  "expected": 568,
+  "tok": 1,
+  "got": 567,
+  "usd": 0.12004999999999999
+ },
+ "Nhóm 26 (retry lowestRanking)": {
+  "run_id": "bBdbOUanHs4ridc8Q",
+  "dataset_id": "HEtklfRKYMOOMhdrh",
+  "status": "SUCCEEDED",
+  "places": 1,
+  "expected": 568,
+  "tok": 1,
+  "got": 186,
+  "usd": 5e-05
+ },
+ "Nhóm 31": {
+  "run_id": "dL4xs3XoIagRTat18",
+  "dataset_id": "onFYH1Ef5ovo88hbm",
+  "status": "SUCCEEDED",
+  "places": 24,
+  "expected": 8000,
+  "tok": 0,
+  "got": 7499,
+  "usd": 4.23065
+ },
+ "Nhóm 31 (retry newest)": {
+  "run_id": "ndwr7dzcrgFRFl171",
+  "dataset_id": "S4QSTulW273tAiazG",
+  "status": "SUCCEEDED",
+  "places": 5,
+  "expected": 1580,
+  "tok": 1,
+  "got": 1316,
+  "usd": 0.75125
+ },
+ "Nhóm 31 (retry mostRelevant)": {
+  "run_id": "l8Db67gnTeoD3M7nO",
+  "dataset_id": "qlyLFbdQ7fyogRTgM",
+  "status": "SUCCEEDED",
+  "places": 2,
+  "expected": 630,
+  "tok": 2,
+  "got": 632,
+  "usd": 0.24004999999999999
+ },
+ "Nhóm 34": {
+  "run_id": "VXwe9DgYzoqwTXXzY",
+  "dataset_id": "zgVE02waPeY6fqasD",
+  "status": "SUCCEEDED",
+  "places": 37,
+  "expected": 8000,
+  "tok": 0,
+  "got": 7999,
+  "usd": 4.707649999999999
+ },
+ "Nhóm 34 (retry newest)": {
+  "run_id": "oEurT6O8lggtLudzi",
+  "dataset_id": "NBYnMajECl5ERvy3h",
+  "status": "SUCCEEDED",
+  "places": 2,
+  "expected": 438,
+  "tok": 1,
+  "got": 439,
+  "usd": 0.03605
+ },
+ "Nhóm 39": {
+  "run_id": "o7SGizJXWGICfjebM",
+  "dataset_id": "wqGa5DVKqaWiM29wZ",
+  "status": "SUCCEEDED",
+  "places": 152,
+  "expected": 8000,
+  "tok": 0,
+  "got": 7950,
+  "usd": 4.768249999999999
+ },
+ "Nhóm 39 (retry newest)": {
+  "run_id": "TMNRn2PcGZ3sUqOTd",
+  "dataset_id": "S6aiCXA2vBAKhTSo5",
+  "status": "SUCCEEDED",
+  "places": 3,
+  "expected": 155,
+  "tok": 1,
+  "got": 155,
+  "usd": 0.06664999999999999
+ }
+}
