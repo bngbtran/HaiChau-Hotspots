@@ -1,0 +1,236 @@
+﻿1
+00:00:01,000 --> 00:00:06,249
+Chào mừng đến với HaiChau Hotspots, bản đồ
+web về các khu ẩm thực ở trung tâm Đà Nẵng.
+
+2
+00:00:06,500 --> 00:00:12,336
+Bản đồ được xây dựng từ dữ liệu Google
+Maps và mô hình phân cụm trên 1.581 cơ sở.
+
+3
+00:00:14,125 --> 00:00:18,430
+Giao diện bằng tiếng Việt nên chúng ta
+sẽ giải thích từng mục trong lúc xem.
+
+4
+00:00:18,625 --> 00:00:21,875
+Màn hình có ba phần. Bên trái là bộ lọc.
+
+5
+00:00:22,083 --> 00:00:23,345
+Ở giữa là bản đồ.
+
+6
+00:00:23,542 --> 00:00:25,592
+Bên phải là khung chi tiết.
+
+7
+00:00:26,125 --> 00:00:35,252
+Bắt đầu với phần tổng quan: 1.537 cơ sở trong
+11 vùng, trên khoảng 4,26 kilômét vuông đất.
+
+8
+00:00:35,458 --> 00:00:42,085
+Các cột này thể hiện cơ cấu ngành hàng. Nhà
+hàng chiếm 43 phần trăm, cà phê 25 phần trăm.
+
+9
+00:00:42,292 --> 00:00:45,973
+Phía dưới là bảy kiểu khu vực
+do mô hình K-Means tìm ra.
+
+10
+00:00:46,167 --> 00:00:54,394
+Cuối khung là các chỉ số chất lượng mô hình,
+gồm silhouette 0,36 và độ ổn định 0,63.
+
+11
+00:00:54,917 --> 00:00:59,926
+Trên bản đồ, mỗi màu là một kiểu khu vực,
+mỗi hình có viền là một vùng liền mạch.
+
+12
+00:01:00,125 --> 00:01:04,989
+Cột 3D thể hiện cơ cấu ngành hàng của
+từng vùng, theo màu ở chú thích bên dưới.
+
+13
+00:01:05,542 --> 00:01:09,736
+Rê chuột vào một vùng, vùng đó phát
+sáng để thấy rõ toàn bộ hình dạng.
+
+14
+00:01:09,958 --> 00:01:14,121
+Viền vùng dừng ở bờ sông Hàn,
+nên diện tích chỉ tính phần đất.
+
+15
+00:01:14,333 --> 00:01:17,518
+Giờ hãy bấm vào Vùng 06, cạnh bờ sông.
+
+16
+00:01:17,708 --> 00:01:24,964
+Khung chi tiết giờ mô tả vùng này. Nhà hàng
+chiếm 49 phần trăm, cà phê 26 phần trăm.
+
+17
+00:01:25,167 --> 00:01:34,834
+Vùng có 228 cơ sở trên 0,29 kilômét vuông, khoảng 786
+cơ sở trên một kilômét vuông, mật độ cao nhất bản đồ.
+
+18
+00:01:35,042 --> 00:01:39,880
+Mục tiếp theo, Vì sao có tên này,
+giải thích tên vùng bằng số liệu.
+
+19
+00:01:40,083 --> 00:01:48,740
+Trong kiểu khu vực này, lẩu nướng và quán nhậu chiếm
+15 phần trăm, gấp 1,6 lần mức chung 9 phần trăm.
+
+20
+00:01:48,958 --> 00:01:55,828
+Món quốc tế gấp 1,3 lần mức chung. Vạch đứng
+nhỏ trên mỗi thanh chính là mức chung đó.
+
+21
+00:01:56,042 --> 00:02:01,272
+Cơm và món Việt thấp hơn bình thường,
+24 phần trăm so với 32 phần trăm.
+
+22
+00:02:01,458 --> 00:02:08,024
+Tiếp theo là so sánh tương tự cho riêng vùng này.
+Màu xanh là cao hơn mức chung, màu đỏ là thấp hơn.
+
+23
+00:02:08,208 --> 00:02:11,631
+Danh sách này chia vùng
+thành các nhóm món chi tiết.
+
+24
+00:02:11,833 --> 00:02:16,198
+Biểu đồ xu hướng cho thấy tỷ lệ bình luận
+giữa các loại hình thay đổi theo thời gian.
+
+25
+00:02:16,417 --> 00:02:23,699
+Có thể chuyển giữa 7, 30 và 90 ngày. Một số đợt crawl
+ưu tiên đánh giá mới nên chỉ nên xem để tham khảo.
+
+26
+00:02:23,917 --> 00:02:31,384
+Ở đây, khoảng giá phổ biến nhất là đến 100 nghìn
+đồng một người, điểm trung bình trên Google là 4,56.
+
+27
+00:02:31,583 --> 00:02:39,458
+Các quán được chia theo mức đánh giá: 162 quán từ
+4,5 trở lên, 52 quán ở mức giữa và 14 quán dưới 4.
+
+28
+00:02:39,667 --> 00:02:41,696
+Bấm vào một quán bất kỳ để xem trên bản đồ.
+
+29
+00:02:42,125 --> 00:02:48,301
+Cửa sổ nhỏ hiện loại hình, khoảng giá, điểm và
+một bình luận gần đây. Đây là quán Cô Ba Phở Bò.
+
+30
+00:02:48,500 --> 00:02:57,251
+Mục này nói về bình luận tích cực. Trong vùng, 90
+phần trăm của 78.903 đánh giá có từ bốn sao trở lên.
+
+31
+00:02:57,458 --> 00:03:02,450
+Các câu mẫu là bình luận năm sao được lọc bằng
+từ khoá, chưa phải mô hình phân tích cảm xúc.
+
+32
+00:03:02,667 --> 00:03:07,694
+Cuối cùng, từ khoá là các cụm từ xuất hiện
+ở đây nhiều hơn nơi khác, ví dụ mực tươi.
+
+33
+00:03:08,250 --> 00:03:12,580
+Bộ lọc bên trái thay đổi nội dung
+bản đồ. Hãy chọn một kiểu khu vực.
+
+34
+00:03:12,792 --> 00:03:18,995
+Giờ chỉ còn các vùng lẩu nướng và
+món quốc tế: Vùng 04 và Vùng 06.
+
+35
+00:03:19,208 --> 00:03:22,160
+Bạn cũng có thể lọc theo
+địa điểm và diện tích vùng.
+
+36
+00:03:22,375 --> 00:03:28,688
+Các ô này điều khiển từng loại hình. Cột trái
+dành cho bản đồ, cột phải dành cho biểu đồ.
+
+37
+00:03:28,875 --> 00:03:32,586
+Bỏ chọn nhà hàng sẽ ẩn nhóm
+này khỏi cột 3D và bản đồ.
+
+38
+00:03:32,792 --> 00:03:34,974
+Nút đặt lại sẽ khôi phục tất cả.
+
+39
+00:03:35,167 --> 00:03:39,884
+Bạn cũng có thể tự khoanh một khu vực.
+Bấm nút khoanh vùng rồi vẽ trên bản đồ.
+
+40
+00:03:40,083 --> 00:03:44,287
+Khi vẽ xong, khung chi tiết chỉ
+thống kê các quán nằm bên trong.
+
+41
+00:03:44,833 --> 00:03:48,664
+Ô tìm kiếm tìm vùng, quán
+và địa danh ngay khi gõ.
+
+42
+00:03:48,875 --> 00:03:50,997
+Chọn một kết quả sẽ đưa
+bạn tới ngay vị trí đó.
+
+43
+00:03:51,208 --> 00:03:54,085
+Menu tài khoản dùng để đổi
+bản đồ nền và giao diện.
+
+44
+00:03:54,292 --> 00:03:58,362
+Đây là chế độ vệ tinh, với
+các vùng nằm trên ảnh thật.
+
+45
+00:03:58,583 --> 00:04:00,065
+Và đây là giao diện tối.
+
+46
+00:04:00,250 --> 00:04:04,359
+Biểu tượng chuông cho biết thời gian
+cập nhật dữ liệu và tóm tắt mô hình.
+
+47
+00:04:04,583 --> 00:04:10,459
+Một lưu ý khi đọc kết quả: tên khu vực mô tả cơ
+cấu ngành hàng, không nói lên đối tượng khách hàng.
+
+48
+00:04:10,667 --> 00:04:14,295
+Và mỗi kiểu khu vực là một xu hướng,
+không phải phân loại tuyệt đối.
+
+49
+00:04:15,833 --> 00:04:18,388
+Cảm ơn bạn đã theo dõi HaiChau Hotspots.
