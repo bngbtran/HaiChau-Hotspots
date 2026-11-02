@@ -396,7 +396,7 @@ const store = { get: (k, d) => { try { return localStorage.getItem(k) ?? d; } ca
 /* Màu loại hình: 4 màu thương hiệu (cát, san hô, ngọc, xanh) + 3 màu cùng độ đậm nhạt (nâu cà phê, hồng, tím) */
 const CAT_COLOR = { ca_phe: "#9A6A4F", banh_mi: "#E8B04B", tra_sua: "#E27FA0", nha_hang: "#F28C5B", cua_hang: "#3FB8B4", quan_an: "#4A90B5", an_vat: "#8E7CC3" };
 const CAT_FALLBACK = ["#9A6A4F", "#E8B04B", "#E27FA0", "#F28C5B", "#3FB8B4", "#4A90B5", "#8E7CC3", "#6B7A88"];
-const CAT_SHORT = { quan_an: "Quán ăn", cua_hang: "Cửa hàng", an_vat: "Ăn vặt" };
+const CAT_SHORT = { quan_an: "Quán ăn", cua_hang: "Cửa hàng", an_vat: "Ăn vặt", tra_sua: "Trà sữa" };
 /* Màu kiểu khu vực (tô vùng) theo bảng thương hiệu; các vùng kề nhau luôn khác kiểu nên luôn khác màu */
 const TYPE_PALETTE = ["#4A90B5", "#3FB8B4", "#E8B04B", "#F28C5B", "#8E7CC3", "#6BAF73", "#D9667F", "#5C7A99"];
 const INK = "#1F3A4D";
