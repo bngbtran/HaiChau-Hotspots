@@ -20,6 +20,7 @@
   --chrome:#11171D; --chrome-2:#172029; --chrome-3:#1F2A35; --chrome-line:#2A3743; --chrome-ink:#F3EEE6; --chrome-muted:#9AA8B4;
   --b-blue:#4A90B5; --b-teal:#5CC3C1; --b-coral:#F28C5B; --b-sand:#F7CF8F; --b-cream:#FAEBD3;
   --accent:#2E6E92; --accent-ink:#2A6688; --accent-soft:#E2EFF6; --on-accent:#FFFFFF;
+  --up:#17795A; --down:#BF4128;
   --card:#FFFFFF; --card-2:#F8F4EC; --card-line:#ECE5D8; --card-ink:#1F3A4D; --card-muted:#56697A;
   --navy:#1F3A4D; --star:#B9770E;
   --shadow:0 10px 30px rgba(15,27,46,.18); --shadow-sm:0 2px 8px rgba(15,27,46,.18);
@@ -29,6 +30,7 @@
 }
 :root[data-theme="dark"]{
   --accent:#7FB7D6; --accent-ink:#9CCBE5; --accent-soft:#1B3241; --on-accent:#11171D;
+  --up:#5FD3A5; --down:#FF9B85;
   --card:#172029; --card-2:#1F2A35; --card-line:#2A3743; --card-ink:#F3EEE6; --card-muted:#9AA8B4;
   --star:#F7CF8F; color-scheme:dark;
 }
@@ -200,7 +202,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .rows .v{font-weight:600}
 .rows .v small{color:var(--card-muted);font-weight:400;margin-left:8px;display:inline-block;min-width:44px;text-align:right}
 .rows li.link{cursor:pointer;border-radius:8px;padding:6px 8px;margin:0 -8px;transition:background .15s}
-.rows li.link:hover{background:var(--card-2)}
+.rows li.link:hover{background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent),0 0 14px color-mix(in srgb,var(--accent) 45%,transparent)}
 .boxes{display:grid;grid-template-columns:1fr 1fr;background:var(--card-2);border:1px solid var(--card-line);border-radius:12px;margin-top:16px}
 .box{padding:12px 14px;display:grid;grid-template-columns:22px 1fr;gap:3px 12px;align-items:center}
 .box+.box{border-left:1px solid var(--card-line)}
@@ -218,8 +220,26 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .kw{font-size:12.5px;padding:5px 11px;border-radius:999px;background:var(--card-2);border:1px solid var(--card-line)}
 .top{list-style:none;margin:0;padding:0}
 .top li+li{border-top:1px solid var(--card-line)}
+.why-k{font-size:11.5px;font-weight:600;letter-spacing:.03em;color:var(--card-muted);margin:14px 0 8px}
+.why-c{background:var(--card-2);border:1px solid var(--card-line);border-radius:12px;padding:12px 14px}
+.why-c+.why-c{margin-top:8px}
+.why-h{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px;font-weight:600}
+.lift{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+.lift.up,.rows .v.up{color:var(--up)}
+.lift.down,.rows .v.down{color:var(--down)}
+.why-n{font-size:12.5px;color:var(--card-muted);margin-top:3px}
+.why-n b{font-size:16px;font-weight:700;color:var(--card-ink)}
+.why-bar{position:relative;height:8px;border-radius:4px;background:var(--card-line);margin:9px 0 6px}
+.why-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+.why-bar s{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--card-ink)}
+.why-d{font-size:11.5px;color:var(--card-muted)}
+.tier+.tier{margin-top:18px}
+.tier-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13.5px;margin-bottom:4px}
+.tier-h b{font-weight:600}
+.tier-h small{font-size:11.5px;color:var(--card-muted);margin-left:8px;font-weight:400}
+.cmt .pq{font-size:12.5px;line-height:1.45;margin:0 0 10px;white-space:pre-line}
 .sp{display:flex;justify-content:space-between;align-items:center;gap:10px;width:calc(100% + 16px);margin:0 -8px;padding:9px 8px;text-align:left;background:none;border:0;border-radius:8px;font-size:13.5px;cursor:pointer;transition:background .15s}
-.sp:hover{background:var(--card-2)}
+.sp:hover{background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent),0 0 14px color-mix(in srgb,var(--accent) 45%,transparent)}
 .sp[aria-pressed="true"]{background:var(--accent-soft)}
 .sp .p{font-size:12px;color:var(--card-muted);white-space:nowrap}
 .note{font-size:12.5px;color:var(--card-muted);margin:0}
@@ -581,7 +601,7 @@ function load(data) {
   ZONES.forEach((z) => {
     z.cellObjs = z.cells.map((id) => CELLS[cellIdx[id]]); z.stores = [];
     z.total = Object.values(z.cats).reduce((a, b) => a + b, 0);
-    z.geom = zoneGeometry(z.cells, grid);
+    z.geom = z.geom || zoneGeometry(z.cells, grid);   // file mới đã có hình cắt theo bờ sông
   });
   STORES.forEach((s, i) => { s.i = i; s.z = s.c != null && cellIdx[s.c] != null ? CELLS[cellIdx[s.c]].z : -1; if (s.z >= 0) ZONES[s.z].stores.push(s); });
   typeFilter = "all"; sizeFilter = "all"; catsMap = CATS.map((c) => c.id); catsChart = [...catsMap]; labelsReady = false;
@@ -597,7 +617,7 @@ function load(data) {
   home(0);
 }
 
-/* ---------- Hình vùng: viền ngoài của các ô cùng vùng, thu vào một chút và bo góc ---------- */
+/* ---------- Hình vùng: viền ngoài của các ô cùng vùng, thu vào rất ít (5 m) và bo góc ---------- */
 function gridOf(cells) {
   const c = cells[0], [cx, cy] = c.id.split("_").map(Number), dLng = c.b[1][1] - c.b[0][1], dLat = c.b[1][0] - c.b[0][0];
   return { lng0: c.b[0][1] - cx * dLng, lat0: c.b[0][0] - cy * dLat, dLng, dLat };
@@ -658,7 +678,7 @@ function inRing(x, y, r) {
   return inside;
 }
 function zoneGeometry(ids, g) {
-  const rings = boundaryRings(ids).map((r) => roundCorners(insetRing(simplifyRing(r), .06), .26));
+  const rings = boundaryRings(ids).map((r) => roundCorners(insetRing(simplifyRing(r), .02), .26));
   const outers = rings.filter((r) => signedArea(r) > 0).map((r) => [r]);
   rings.filter((r) => signedArea(r) < 0).forEach((h) => { const o = outers.find((o) => inRing(h[0][0], h[0][1], o[0])); if (o) o.push(h); });
   const ll = (r) => { const c = r.map(([x, y]) => [+(g.lng0 + x * g.dLng).toFixed(6), +(g.lat0 + y * g.dLat).toFixed(6)]); c.push(c[0]); return c; };
@@ -722,13 +742,15 @@ function paintMap() {
   const selZ = sel.kind === "zone" ? sel.z : -99;
   map.setPaintProperty("zones-fill", "fill-color", typeMatch());
   const sat = basemap === "sat", dim = sel.kind === "zone";
-  map.setPaintProperty("zones-fill", "fill-opacity", ["case", st("sel"), sat ? .4 : .34, st("hover"), sat ? .36 : .3, dim ? (sat ? .24 : .2) : (sat ? .3 : .26)]);
-  map.setPaintProperty("zones-case", "line-width", ["case", st("sel"), 7.5, st("hover"), 6, 4.6]);
+  map.setPaintProperty("zones-fill", "fill-opacity", ["case", st("hover"), sat ? .58 : .52, st("sel"), sat ? .4 : .34, dim ? (sat ? .24 : .2) : (sat ? .3 : .26)]);
+  map.setPaintProperty("zones-case", "line-width", ["case", st("hover"), 8.5, st("sel"), 7.5, 4.6]);
   map.setPaintProperty("zones-line", "line-color", typeMatch());
-  map.setPaintProperty("zones-line", "line-width", ["case", st("sel"), 3.6, st("hover"), 2.8, 2]);
+  map.setPaintProperty("zones-line", "line-width", ["case", st("hover"), 4.5, st("sel"), 3.6, 2]);
   map.setPaintProperty("zones-line", "line-opacity", .95);
   map.setPaintProperty("zones-glow", "line-color", typeMatch());
-  map.setPaintProperty("zones-glow", "line-opacity", ["case", st("sel"), .6, 0]);
+  map.setPaintProperty("zones-glow", "line-width", ["case", st("hover"), 30, 14]);
+  map.setPaintProperty("zones-glow", "line-blur", ["case", st("hover"), 16, 10]);
+  map.setPaintProperty("zones-glow", "line-opacity", ["case", st("hover"), 1, st("sel"), .6, 0]);
   map.setPaintProperty("stores", "circle-color", catMatch());
   map.setPaintProperty("stores", "circle-stroke-color", ["case", st("in"), INK, "#FFFFFF"]);
   map.setPaintProperty("stores", "circle-radius", ["interpolate", ["linear"], ["zoom"], 14.6, ["case", ["==", ["get", "z"], selZ], 2.8, 2], 16, ["case", ["==", ["get", "z"], selZ], 4.4, 3.2], 18, 7]);
@@ -809,11 +831,12 @@ function fly(bounds, maxZoom = 16, duration = 1100) {
   if (cam) map.flyTo({ ...cam, zoom: Math.min(maxZoom, cam.zoom + .45), pitch: PITCH, bearing: map.getBearing(), duration: reduced ? 0 : duration, curve: 1.3, essential: true });
 }
 const boundsOf = (cells) => cells.reduce((b, c) => b.extend([c.b[0][1], c.b[0][0]]).extend([c.b[1][1], c.b[1][0]]), new maplibregl.LngLatBounds());
-// Khung nhìn ban đầu như mẫu: phố trung tâm quanh vùng lớn nhất, vài vùng lân cận lấp đầy bản đồ
+// Khung nhìn ban đầu: lấy tâm các cơ sở trong vùng phân tích để toàn bộ các vùng cùng hiện trên bản đồ
 function home(duration = 1100) {
-  if (!ZONES.length) return;
-  const [lat, lng] = ZONES[0].anchor, z = innerWidth > 1400 ? 14.85 : 14.55;
-  const opts = { center: [lng - .002, lat - .0025], zoom: wide() ? z : 13.9, pitch: PITCH, bearing: BEARING, padding: { right: cardW(), left: 0, top: 0, bottom: 0 } };
+  const S = ZONES.flatMap((z) => z.stores);
+  if (!S.length) return;
+  const lat = avg(S.map((s) => s.la)), lng = avg(S.map((s) => s.ln)), z = innerWidth > 1400 ? 14.85 : 14.55;
+  const opts = { center: [lng, lat], zoom: wide() ? z : 13.9, pitch: PITCH, bearing: BEARING, padding: { right: cardW(), left: 0, top: 0, bottom: 0 } };
   duration ? map.flyTo({ ...opts, duration: reduced ? 0 : duration, essential: true }) : map.jumpTo(opts);
 }
 $("btn-zin").onclick = () => map.zoomIn({ duration: 350 }); $("btn-zout").onclick = () => map.zoomOut({ duration: 350 });
@@ -1033,17 +1056,74 @@ const avg = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 
 const avgPrice = (S) => avg(S.filter((s) => s.pmin != null).map((s) => (s.pmin + s.pmax) / 2));
 const avgRating = (S) => avg(S.filter((s) => s.r != null).map((s) => s.r));
 
+/* Vì sao có tên này: thẻ số liệu của cả kiểu khu vực + cơ cấu của chính vùng này so với mức chung */
+const pct = (v) => `${Math.round(v * 100)}%`, times = (v) => `×${v.toFixed(1).replace(".", ",")}`;
+function whyCard(w, color, dir) {
+  const g = D.groups.find((x) => x.id === w.g), max = Math.max(w.share, g.city) / .9;
+  return `<div class="why-c"><div class="why-h"><span>${esc(g.label)}</span><span class="lift ${dir}">${times(w.lift)}</span></div>
+    <div class="why-n"><b>${pct(w.share)}</b> số quán · mức chung ${pct(g.city)}</div>
+    <div class="why-bar" title="Vạch đứng là mức chung"><i style="width:${w.share / max * 100}%;background:${color}"></i><s style="left:${g.city / max * 100}%"></s></div>
+    <div class="why-d">${esc(g.detail)}</div></div>`;
+}
+function whySection(Z, T) {
+  const total = Object.values(Z.counts).reduce((a, b) => a + b, 0) || 1, why = T.why || { top: [] };
+  const rows = D.groups.map((g) => { const share = (Z.counts[g.id] || 0) / total; return { ...g, share, lift: g.city ? share / g.city : 0 }; }).sort((a, b) => b.lift - a.lift);
+  return `<section class="sec"><h3>Vì sao có tên này <small>số liệu cả kiểu khu vực</small></h3>
+    <div class="zrow"><span class="dot" style="background:${tColor(Z.t)}"></span><b>${esc(T.name)}</b></div>
+    ${why.top.length ? `<div class="why-k">NHIỀU HƠN MỨC CHUNG</div>${why.top.map((w) => whyCard(w, tColor(Z.t), "up")).join("")}` : `<p class="note" style="margin-top:10px">Không có nhóm nào vượt hẳn mức chung nên gọi là khu hỗn hợp.</p>`}
+    ${why.low ? `<div class="why-k">ÍT HƠN MỨC CHUNG</div>${whyCard(why.low, "var(--card-muted)", "down")}` : ""}
+    <p class="note" style="margin-top:10px">Tên mô tả cơ cấu quán, không nói lên đối tượng khách hàng.</p></section>
+    <section class="sec"><h3>Vùng này so với mức chung <small>riêng ${esc(Z.name)}</small></h3>
+    <ul class="rows">${rows.map((g) => `<li title="${esc(g.detail)}"><span class="dot" style="background:${g.lift >= 1.15 && g.share >= .05 ? tColor(Z.t) : "var(--card-line)"}"></span><span>${esc(g.label)}<br><small class="note">Mức chung ${pct(g.city)}</small></span>
+      <span class="v ${g.lift >= 1.15 ? "up" : g.lift < 1 / 1.15 ? "down" : ""}">${pct(g.share)}<small>${times(g.lift)}</small></span></li>`).join("")}</ul></section>`;
+}
+function subSection(S) {
+  const counts = {};
+  S.forEach((s) => { counts[s.sub] = (counts[s.sub] || 0) + 1; });
+  const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  if (!rows.length) return "";
+  return `<section class="sec"><h3>Nhóm món chi tiết</h3><ul class="rows">${rows.map(([k, v]) => `<li style="grid-template-columns:1fr auto"><span>${esc(k)}</span>
+    <span class="v">${fmtN(v)}<small>(${Math.round(v / S.length * 100)}%)</small></span></li>`).join("")}</ul></section>`;
+}
+/* Quán theo mức đánh giá Google và bình luận tích cực của vùng; mỗi quán bấm được để xem trên bản đồ */
+const spBtn = (s, right) => `<button type="button" class="sp" data-k="${topList.push(s) - 1}" aria-pressed="false" title="Xem trên bản đồ">
+  <span><span style="color:${cColor(s.k)}">●</span> ${esc(s.n)}</span><span class="p">${right}</span></button>`;
+const TIERS = [
+  { label: "Đánh giá cao", hint: "từ 4,5 sao", test: (r) => r >= 4.5, rank: (s) => s.r * Math.log1p(s.rc) },
+  { label: "Đánh giá trung bình", hint: "4,0 – dưới 4,5 sao", test: (r) => r >= 4 && r < 4.5, rank: (s) => s.r * Math.log1p(s.rc) },
+  { label: "Đánh giá thấp", hint: "dưới 4,0 sao", test: (r) => r < 4, rank: (s) => s.rc },   // quán thấp điểm: ưu tiên quán có nhiều lượt đánh giá, đáng tin hơn
+];
+function ratingSection(S) {
+  const rated = S.filter((s) => s.r != null && catsChart.includes(s.k));
+  if (!rated.length) return "";
+  return `<section class="sec"><h3>Quán theo mức đánh giá <small>điểm Google Maps</small></h3>${TIERS.map((t) => {
+    const list = rated.filter((s) => t.test(s.r)).sort((a, b) => t.rank(b) - t.rank(a));
+    return `<div class="tier"><div class="tier-h"><span><b>${t.label}</b><small>${t.hint}</small></span><span class="v">${fmtN(list.length)}<small>(${Math.round(list.length / rated.length * 100)}%)</small></span></div>
+      ${list.length ? `<ul class="top">${list.slice(0, 5).map((s) => `<li>${spBtn(s, `<span class="star">★</span> ${s.r.toFixed(1)} · ${fmtN(s.rc)} lượt`)}</li>`).join("")}</ul>` : `<p class="note">Không có quán nào.</p>`}</div>`;
+  }).join("")}</section>`;
+}
+function positiveSection(Z) {
+  const items = (Z.pos_cm || []).map(([id, stars, text]) => ({ s: Z.stores.find((x) => x.id === id), stars, text })).filter((c) => c.s);
+  if (!items.length) return "";
+  return `<section class="sec"><h3>Bình luận tích cực <small>${Math.round(Z.pos_rate * 100)}% trong ${fmtN(Z.n_rated)} đánh giá</small></h3>
+    <ul class="top">${items.map((c) => `<li class="cmt">${spBtn(c.s, `<span class="star">★</span> ${c.stars}`)}<p class="pq">“${esc(c.text)}”</p></li>`).join("")}</ul>
+    <p class="note" style="margin-top:10px">Tỷ lệ tính trên các đánh giá từ 4 sao trở lên. Bình luận hiển thị là loại 5 sao, được lọc bằng từ khoá khen/chê (chưa phải mô hình phân tích cảm xúc); nhiều lượt thích hơn hiện trước.</p></section>`;
+}
 function renderZone(Z, keep) {
+  topList = [];
   const T = TYPES[Z.t];
   setDetail(head("Chi tiết vùng", "Đóng chi tiết vùng") + `
     <div class="zrow"><span class="dot" style="background:${tColor(Z.t)}"></span><b>${esc(Z.name)} (${fmtKm2(Z.km2)})</b><span class="pill">Đang chọn</span></div>
     <p class="zsub">${esc(T.name)}</p>
     ${composition(Z.cats, Z.total)}
-    <div class="boxes">${box("store", "Tổng số cơ sở", fmtN(Z.n))}${box("area", "Diện tích vùng", fmtKm2(Z.km2))}</div></section>
+    <div class="boxes">${box("store", "Tổng số cơ sở", fmtN(Z.n))}${box("area", "Diện tích vùng", fmtKm2(Z.km2))}${box("area", "Số ô 250 m", fmtN(Z.cells.length))}${box("store", "Mật độ", `${fmtN(Math.round(Z.n / Z.km2))} cơ sở/km²`)}${box("star", "Lượt đánh giá Google", fmtN(Z.reviews))}${box("price", "Cơ sở có dữ liệu giá", fmtN(Z.n_priced ?? 0))}</div></section>
+    ${whySection(Z, T)}
+    ${subSection(Z.stores)}
     ${trendSection([Z.trend])}
-    <section class="sec"><h3>Kiểu khu vực</h3><ul class="rows"><li><span class="dot" style="background:${tColor(Z.t)}"></span><span>${esc(T.name)}<br><small class="note">${esc(T.desc)}</small></span><span></span></li></ul></section>
     ${priceSection(Z.price, Z.rating)}
-    ${kwSection(Z.kw)}${topSection(Z.stores)}`, keep);
+    ${ratingSection(Z.stores)}
+    ${positiveSection(Z)}
+    ${kwSection(Z.kw)}`, keep);
   finish(() => overview());
 }
 function renderOverview(keep) {
