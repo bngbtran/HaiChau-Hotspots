@@ -1,4 +1,6 @@
 node_modules/
 .DS_Store
-data/crawl/apify/tokens.json
+__pycache__/
+.vscode/
 data/cleaned/
+data/crawl/apify/tokens.json

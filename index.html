@@ -120,8 +120,6 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .btn-outline:hover{background:var(--chrome-2)}
 .btn-outline:active{transform:scale(.98)}
 .btn-outline svg{width:17px;height:17px}
-.model-note{margin:16px 0 0;font-size:11.5px;line-height:1.6;color:var(--chrome-muted)}
-.model-note a{color:var(--chrome-muted)}
 
 /* ---------- Bản đồ ---------- */
 .map-wrap{position:relative;min-width:0;background:#F1EBE1;overflow:hidden}
@@ -156,7 +154,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .legend{margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;align-items:center;background:rgba(255,255,255,.96);color:#1F3A4D;border-radius:12px;box-shadow:var(--shadow-sm);padding:12px 18px;font-size:12px;white-space:nowrap}
 .legend span{display:inline-flex;align-items:center;gap:7px}
 .legend i{width:12px;height:12px;border-radius:50%;display:inline-block}
-.maplibregl-ctrl-attrib{display:none}
+
 .maplibregl-popup{animation:pop .18s var(--ease)}
 .maplibregl-popup-content{background:var(--card);color:var(--card-ink);border-radius:12px;box-shadow:0 10px 30px rgba(15,27,46,.25);padding:12px 14px;font:13px/1.5 var(--font-ui);min-width:210px}
 .maplibregl-popup-tip{border-top-color:var(--card)!important;border-bottom-color:var(--card)!important}
@@ -202,7 +200,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .rows .v{font-weight:600}
 .rows .v small{color:var(--card-muted);font-weight:400;margin-left:8px;display:inline-block;min-width:44px;text-align:right}
 .rows li.link{cursor:pointer;border-radius:8px;padding:6px 8px;margin:0 -8px;transition:background .15s}
-.rows li.link:hover{background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent),0 0 14px color-mix(in srgb,var(--accent) 45%,transparent)}
+.rows li.link:hover{position:relative;z-index:1;background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent),0 0 14px color-mix(in srgb,var(--accent) 45%,transparent)}
 .boxes{display:grid;grid-template-columns:1fr 1fr;background:var(--card-2);border:1px solid var(--card-line);border-radius:12px;margin-top:16px}
 .box{padding:12px 14px;display:grid;grid-template-columns:22px 1fr;gap:3px 12px;align-items:center}
 .box+.box{border-left:1px solid var(--card-line)}
@@ -233,13 +231,14 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .why-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
 .why-bar s{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--card-ink)}
 .why-d{font-size:11.5px;color:var(--card-muted)}
+.maplibregl-ctrl-bottom-left{bottom:72px}
 .tier+.tier{margin-top:18px}
 .tier-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13.5px;margin-bottom:4px}
 .tier-h b{font-weight:600}
 .tier-h small{font-size:11.5px;color:var(--card-muted);margin-left:8px;font-weight:400}
 .cmt .pq{font-size:12.5px;line-height:1.45;margin:0 0 10px;white-space:pre-line}
 .sp{display:flex;justify-content:space-between;align-items:center;gap:10px;width:calc(100% + 16px);margin:0 -8px;padding:9px 8px;text-align:left;background:none;border:0;border-radius:8px;font-size:13.5px;cursor:pointer;transition:background .15s}
-.sp:hover{background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent),0 0 14px color-mix(in srgb,var(--accent) 45%,transparent)}
+.sp:hover{position:relative;z-index:1;background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent),0 0 14px color-mix(in srgb,var(--accent) 45%,transparent)}
 .sp[aria-pressed="true"]{background:var(--accent-soft)}
 .sp .p{font-size:12px;color:var(--card-muted);white-space:nowrap}
 .note{font-size:12.5px;color:var(--card-muted);margin:0}
@@ -356,7 +355,6 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
         Đặt lại bộ lọc
       </button>
-      <p class="model-note" id="model-note"></p>
     </aside>
 
     <main class="map-wrap">
@@ -404,8 +402,7 @@ const ATTRIB = 'Ảnh vệ tinh: Esri, Maxar, Earthstar Geographics · Bản đ�
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const fmtK = (v) => v == null ? "–" : `${Math.round(v / 1000)}k₫`;
-const fmtRange = (a, b) => a == null ? "–" : `${Math.round(a / 1000)}–${Math.round(b / 1000)}k₫`;
+const fmtRange = (a, b) => a == null ? "–" : b == null ? `Trên ${a / 1e6} triệu₫` : a < 1000 ? `Đến ${b / 1000}k₫` : `${a / 1000}–${b / 1000}k₫`;   // giữ nguyên khoảng giá gốc của Google
 const fmtKm2 = (v) => `${v.toFixed(2).replace(".", ",")} km²`;
 const fmtN = (v) => Number(v).toLocaleString("vi-VN");
 const wide = () => innerWidth > 900;
@@ -476,6 +473,9 @@ const map = new maplibregl.Map({
   minZoom: 12, maxZoom: 18.5, maxBounds: [[108.08, 15.95], [108.36, 16.16]], attributionControl: false,
   renderWorldCopies: false, fadeDuration: 200, antialias: true,
 });
+// Ghi công bản đồ gói gọn trong nút (i) để giao diện đỡ rối
+map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: ATTRIB }), "bottom-left");
+map.once("load", () => { const a = document.querySelector(".maplibregl-ctrl-attrib"); a?.classList.remove("maplibregl-compact-show"); a?.removeAttribute("open"); });
 const mapReady = new Promise((r) => map.on("load", r));
 const fontsReady = document.fonts ? Promise.all([document.fonts.load("600 13px Inter"), document.fonts.load("500 11.5px Inter")]).catch(() => {}) : Promise.resolve();
 const empty = { type: "FeatureCollection", features: [] };
@@ -607,7 +607,6 @@ function load(data) {
   typeFilter = "all"; sizeFilter = "all"; catsMap = CATS.map((c) => c.id); catsChart = [...catsMap]; labelsReady = false;
 
   const m = data.meta;
-  $("model-note").innerHTML = `${m.method} · ${m.k} kiểu khu vực · ${m.n_zones} vùng · ${fmtN(m.n_stores)} cơ sở · cập nhật ${fmtTime(m.generated_at).split(" ")[0]}<br>${ATTRIB}`;
   renderNotes();
 
   map.getSource("zones").setData({ type: "FeatureCollection", features: ZONES.map((z) => ({ type: "Feature", id: z.id, properties: { t: z.t, z: z.id }, geometry: z.geom })) });
@@ -1035,10 +1034,10 @@ function topSection(S) {
   topList = S.filter((s) => catsChart.includes(s.k)).sort((a, b) => ((b.r || 0) * Math.log1p(b.rc)) - ((a.r || 0) * Math.log1p(a.rc))).slice(0, 5);
   if (!topList.length) return "";
   return `<section class="sec"><h3>Cơ sở nổi bật</h3><ul class="top">${topList.map((s, i) => `<li><button type="button" class="sp" data-k="${i}" aria-pressed="false" title="Xem trên bản đồ">
-    <span><span style="color:${cColor(s.k)}">●</span> ${esc(s.n)}</span><span class="p">${s.r != null ? `<span class="star">★</span> ${s.r.toFixed(1)} · ` : ""}${fmtK(s.pmin != null ? (s.pmin + s.pmax) / 2 : null)}</span></button></li>`).join("")}</ul></section>`;
+    <span><span style="color:${cColor(s.k)}">●</span> ${esc(s.n)}</span><span class="p">${s.r != null ? `<span class="star">★</span> ${s.r.toFixed(1)} · ` : ""}${fmtRange(s.pmin, s.pmax)}</span></button></li>`).join("")}</ul></section>`;
 }
 const kwSection = (kw) => kw && kw.length ? `<section class="sec"><h3>Từ khoá bình luận</h3><div class="chips">${kw.map((k) => `<span class="kw">${esc(k)}</span>`).join("")}</div></section>` : "";
-const priceSection = (price, rate) => `<section class="sec"><h3>Giá &amp; đánh giá ${isSim() ? '<small><span class="tagline">giả lập</span></small>' : ""}</h3><div class="boxes" style="margin-top:0">${box("price", "Giá TB mỗi người", fmtK(price))}${box("star", "Đánh giá TB", rating(rate))}</div></section>`;
+const priceSection = (price, rate) => `<section class="sec"><h3>Giá &amp; đánh giá ${isSim() ? '<small><span class="tagline">giả lập</span></small>' : ""}</h3><div class="boxes" style="margin-top:0">${box("price", "Giá phổ biến mỗi người", fmtRange(price?.[0], price?.[1]))}${box("star", "Đánh giá TB", rating(rate))}</div></section>`;
 function setDetail(html, keepScroll) {
   const el = $("detail"), y = el.scrollTop;
   el.innerHTML = `<div class="${keepScroll ? "" : "in"}">${html}</div>`;
@@ -1053,7 +1052,11 @@ function finish(onClose) {
   bindCharts(el);
 }
 const avg = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
-const avgPrice = (S) => avg(S.filter((s) => s.pmin != null).map((s) => (s.pmin + s.pmax) / 2));
+const commonBand = (S) => {   // khoảng giá nhiều quán có nhất, bằng nhau thì lấy khoảng thấp hơn
+  const count = new Map(), key = (s) => `${s.pmin}|${s.pmax}`;
+  S.filter((s) => s.pmin != null).forEach((s) => { const k = key(s), c = count.get(k) || { n: 0, band: [s.pmin, s.pmax] }; c.n++; count.set(k, c); });
+  return [...count.values()].sort((a, b) => b.n - a.n || a.band[0] - b.band[0])[0]?.band ?? null;
+};
 const avgRating = (S) => avg(S.filter((s) => s.r != null).map((s) => s.r));
 
 /* Vì sao có tên này: thẻ số liệu của cả kiểu khu vực + cơ cấu của chính vùng này so với mức chung */
@@ -1106,8 +1109,7 @@ function positiveSection(Z) {
   const items = (Z.pos_cm || []).map(([id, stars, text]) => ({ s: Z.stores.find((x) => x.id === id), stars, text })).filter((c) => c.s);
   if (!items.length) return "";
   return `<section class="sec"><h3>Bình luận tích cực <small>${Math.round(Z.pos_rate * 100)}% trong ${fmtN(Z.n_rated)} đánh giá</small></h3>
-    <ul class="top">${items.map((c) => `<li class="cmt">${spBtn(c.s, `<span class="star">★</span> ${c.stars}`)}<p class="pq">“${esc(c.text)}”</p></li>`).join("")}</ul>
-    <p class="note" style="margin-top:10px">Tỷ lệ tính trên các đánh giá từ 4 sao trở lên. Bình luận hiển thị là loại 5 sao, được lọc bằng từ khoá khen/chê (chưa phải mô hình phân tích cảm xúc); nhiều lượt thích hơn hiện trước.</p></section>`;
+    <ul class="top">${items.map((c) => `<li class="cmt">${spBtn(c.s, `<span class="star">★</span> ${c.stars}`)}<p class="pq">“${esc(c.text)}”</p></li>`).join("")}</ul></section>`;
 }
 function renderZone(Z, keep) {
   topList = [];
@@ -1140,7 +1142,7 @@ function renderOverview(keep) {
       return `<li class="link" data-zone="${zs[0].id}" title="Xem vùng lớn nhất của kiểu này"><span class="dot" style="background:${tColor(t.id)}"></span><span>${esc(t.name)}</span><span class="v">${zs.length}<small>vùng</small></span></li>`;
     }).join("")}</ul></section>
     ${trendSection(ZONES.map((z) => z.trend))}
-    ${priceSection(avgPrice(S), avgRating(S))}
+    ${priceSection(commonBand(S), avgRating(S))}
     <section class="sec"><h3>Mô hình <small>giá: ${label(m.source.prices)} · bình luận: ${label(m.source.reviews)}</small></h3>
       <div class="metrics"><div><b>${m.metrics.silhouette.toFixed(2)}</b><span>Silhouette</span></div><div><b>${m.metrics.davies_bouldin.toFixed(2)}</b><span>Davies–Bouldin</span></div>
       <div><b>${m.metrics.stability.toFixed(2)}</b><span>Độ ổn định</span></div><div><b>${m.metrics.ari_hc.toFixed(2)} / ${m.metrics.ari_gmm.toFixed(2)}</b><span>Khớp HC / GMM</span></div></div></section>`, keep);
@@ -1156,7 +1158,7 @@ function renderRegion(keep) {
     <div class="boxes">${box("store", "Tổng số cơ sở", fmtN(S.length))}${box("area", "Diện tích", fmtKm2(sel.km2))}</div></section>
     <section class="sec"><h3>Theo vùng</h3><ul class="rows">${zs.map((z) => `<li class="link" data-zone="${z.id}"><span class="dot" style="background:${tColor(z.t)}"></span><span>${esc(z.name)} · ${esc(TYPES[z.t].name)}</span><span class="v">${byZ[z.id]}</span></li>`).join("")}
       ${byZ[-1] ? `<li><span class="dot" style="background:#94A3B8"></span><span>Ngoài vùng phân tích</span><span class="v">${byZ[-1]}</span></li>` : ""}</ul></section>
-    ${priceSection(avgPrice(S), avgRating(S))}
+    ${priceSection(commonBand(S), avgRating(S))}
     ${topSection(S)}` : `<p class="note" style="margin-top:12px">Không có cơ sở nào. Thử khoanh rộng hơn.</p>`}`, keep);
   finish(() => overview(false));
 }
