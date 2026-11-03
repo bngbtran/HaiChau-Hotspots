@@ -4,3 +4,4 @@ __pycache__/
 .vscode/
 data/cleaned/
 data/crawl/apify/tokens.json
+handovers/*.mp4
