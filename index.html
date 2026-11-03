@@ -232,10 +232,15 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .why-bar s{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--card-ink)}
 .why-d{font-size:11.5px;color:var(--card-muted)}
 .maplibregl-ctrl-bottom-left{bottom:72px}
+.ztabs{position:sticky;top:-20px;z-index:3;display:grid;grid-template-columns:repeat(5,1fr);margin:12px -22px 0;padding:0 14px;background:var(--card);border-bottom:1px solid var(--card-line)}
+.ztabs button{border:0;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;padding:11px 0 10px;font-size:12.5px;white-space:nowrap;cursor:pointer;color:var(--card-muted);transition:color .2s,border-color .2s}
+.ztabs button:hover{color:var(--card-ink)}
+.ztabs button[aria-selected="true"]{color:var(--accent-ink);border-bottom-color:var(--accent);font-weight:600}
 .tier+.tier{margin-top:18px}
 .tier-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13.5px;margin-bottom:4px}
 .tier-h b{font-weight:600}
 .tier-h small{font-size:11.5px;color:var(--card-muted);margin-left:8px;font-weight:400}
+.star.low{color:var(--down)}
 .cmt .pq{font-size:12.5px;line-height:1.45;margin:0 0 10px;white-space:pre-line}
 .sp{display:flex;justify-content:space-between;align-items:center;gap:10px;width:calc(100% + 16px);margin:0 -8px;padding:9px 8px;text-align:left;background:none;border:0;border-radius:8px;font-size:13.5px;cursor:pointer;transition:background .15s}
 .sp:hover{position:relative;z-index:1;background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent),0 0 14px color-mix(in srgb,var(--accent) 45%,transparent)}
@@ -1049,6 +1054,16 @@ function finish(onClose) {
   el.querySelectorAll(".sp").forEach((b) => b.onclick = () => focusStore(topList[+b.dataset.k], b));
   el.querySelectorAll("[data-range]").forEach((b) => b.onclick = () => { trendRange = +b.dataset.range; rerender(true); });
   el.querySelectorAll("[data-zone]").forEach((b) => b.onclick = () => selectZone(+b.dataset.zone));
+  el.querySelectorAll("[data-tone]").forEach((b) => b.onclick = () => { commentTone = b.dataset.tone; rerender(true); });
+  const openTab = (id) => { zoneTab = id; rerender(true); $("detail").scrollTop = 0; $(`ztab-${id}`).focus({ preventScroll: true }); };
+  el.querySelectorAll("[data-ztab]").forEach((b) => {
+    b.onclick = () => openTab(b.dataset.ztab);
+    b.onkeydown = (e) => {
+      const ids = ZONE_TABS.map((t) => t.id), i = ids.indexOf(b.dataset.ztab);
+      const next = e.key === "ArrowRight" ? ids[(i + 1) % ids.length] : e.key === "ArrowLeft" ? ids[(i - 1 + ids.length) % ids.length] : e.key === "Home" ? ids[0] : e.key === "End" ? ids[ids.length - 1] : null;
+      if (next) { e.preventDefault(); openTab(next); }
+    };
+  });
   bindCharts(el);
 }
 const avg = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
@@ -1105,27 +1120,37 @@ function ratingSection(S) {
       ${list.length ? `<ul class="top">${list.slice(0, 5).map((s) => `<li>${spBtn(s, `<span class="star">★</span> ${s.r.toFixed(1)} · ${fmtN(s.rc)} lượt`)}</li>`).join("")}</ul>` : `<p class="note">Không có quán nào.</p>`}</div>`;
   }).join("")}</section>`;
 }
-function positiveSection(Z) {
-  const items = (Z.pos_cm || []).map(([id, stars, text]) => ({ s: Z.stores.find((x) => x.id === id), stars, text })).filter((c) => c.s);
+function commentSection(Z, title, note, list, tone) {
+  const items = (list || []).map(([id, stars, text]) => ({ s: Z.stores.find((x) => x.id === id), stars, text })).filter((c) => c.s);
   if (!items.length) return "";
-  return `<section class="sec"><h3>Bình luận tích cực <small>${Math.round(Z.pos_rate * 100)}% trong ${fmtN(Z.n_rated)} đánh giá</small></h3>
-    <ul class="top">${items.map((c) => `<li class="cmt">${spBtn(c.s, `<span class="star">★</span> ${c.stars}`)}<p class="pq">“${esc(c.text)}”</p></li>`).join("")}</ul></section>`;
+  return `<section class="sec"><h3>${title} <small>${note}</small></h3>
+    <ul class="top">${items.map((c) => `<li class="cmt">${spBtn(c.s, `<span class="star ${tone}">★</span> ${c.stars}`)}<p class="pq">“${esc(c.text)}”</p></li>`).join("")}</ul></section>`;
 }
+const goodComments = (Z) => commentSection(Z, "Đánh giá tốt", `${Math.round(Z.pos_rate * 100)}% từ 4 sao, trong ${fmtN(Z.n_rated)} đánh giá`, Z.pos_cm, "");
+const badComments = (Z) => commentSection(Z, "Đánh giá xấu", `${Math.round((Z.neg_rate ?? 0) * 100)}% từ 1–2 sao, trong ${fmtN(Z.n_rated)} đánh giá`, Z.neg_cm, "low");
+let commentTone = "good";   // nút chuyển ở đầu tab Bình luận, để đánh giá xấu không bị khuất dưới đánh giá tốt
+const commentTabs = (Z) => `<div class="tabs" role="tablist" aria-label="Loại đánh giá" style="grid-template-columns:repeat(2,1fr);margin:16px 0 0"><span class="thumb" style="width:calc((100% - 6px)/2);transform:translateX(${commentTone === "good" ? 0 : 100}%)"></span>
+  ${[["good", "Đánh giá tốt", Z.pos_cm], ["bad", "Đánh giá xấu", Z.neg_cm]].map(([id, label, list]) => `<button type="button" role="tab" data-tone="${id}" aria-selected="${id === commentTone}">${label} (${(list || []).length})</button>`).join("")}</div>`;
+/* Chi tiết vùng chia thành các tab; chỉ dựng nội dung của tab đang chọn, tab được giữ khi đổi sang vùng khác */
+const ZONE_TABS = [
+  { id: "overview", label: "Tổng quan", body: (Z) => `${composition(Z.cats, Z.total)}
+    <div class="boxes">${box("store", "Tổng số cơ sở", fmtN(Z.n))}${box("area", "Diện tích vùng", fmtKm2(Z.km2))}${box("area", "Số ô 250 m", fmtN(Z.cells.length))}${box("store", "Mật độ", `${fmtN(Math.round(Z.n / Z.km2))} cơ sở/km²`)}${box("star", "Lượt đánh giá Google", fmtN(Z.reviews))}${box("price", "Cơ sở có dữ liệu giá", fmtN(Z.n_priced ?? 0))}</div></section>
+    ${subSection(Z.stores)}` },
+  { id: "name", label: "Tên vùng", body: (Z, T) => whySection(Z, T) },
+  { id: "trend", label: "Xu hướng", body: (Z) => trendSection([Z.trend]) || `<p class="note" style="margin-top:16px">Chưa có dữ liệu xu hướng.</p>` },
+  { id: "rating", label: "Đánh giá", body: (Z) => `${priceSection(Z.price, Z.rating)}${ratingSection(Z.stores)}` },
+  { id: "comments", label: "Bình luận", body: (Z) => `${commentTabs(Z)}${commentTone === "good" ? goodComments(Z) : badComments(Z)}${kwSection(Z.kw)}` || `<p class="note" style="margin-top:16px">Chưa có bình luận.</p>` },
+];
+let zoneTab = "overview";
+const zoneTabBar = () => `<div class="ztabs" role="tablist" aria-label="Nội dung chi tiết vùng">${ZONE_TABS.map((t) => `<button type="button" role="tab" id="ztab-${t.id}" data-ztab="${t.id}" aria-controls="zpanel" aria-selected="${t.id === zoneTab}" tabindex="${t.id === zoneTab ? 0 : -1}">${t.label}</button>`).join("")}</div>`;
 function renderZone(Z, keep) {
   topList = [];
-  const T = TYPES[Z.t];
+  const T = TYPES[Z.t], tab = ZONE_TABS.find((t) => t.id === zoneTab);
   setDetail(head("Chi tiết vùng", "Đóng chi tiết vùng") + `
     <div class="zrow"><span class="dot" style="background:${tColor(Z.t)}"></span><b>${esc(Z.name)} (${fmtKm2(Z.km2)})</b><span class="pill">Đang chọn</span></div>
     <p class="zsub">${esc(T.name)}</p>
-    ${composition(Z.cats, Z.total)}
-    <div class="boxes">${box("store", "Tổng số cơ sở", fmtN(Z.n))}${box("area", "Diện tích vùng", fmtKm2(Z.km2))}${box("area", "Số ô 250 m", fmtN(Z.cells.length))}${box("store", "Mật độ", `${fmtN(Math.round(Z.n / Z.km2))} cơ sở/km²`)}${box("star", "Lượt đánh giá Google", fmtN(Z.reviews))}${box("price", "Cơ sở có dữ liệu giá", fmtN(Z.n_priced ?? 0))}</div></section>
-    ${whySection(Z, T)}
-    ${subSection(Z.stores)}
-    ${trendSection([Z.trend])}
-    ${priceSection(Z.price, Z.rating)}
-    ${ratingSection(Z.stores)}
-    ${positiveSection(Z)}
-    ${kwSection(Z.kw)}`, keep);
+    ${zoneTabBar()}
+    <div id="zpanel" role="tabpanel" aria-labelledby="ztab-${tab.id}">${tab.body(Z, T)}</div>`, keep);
   finish(() => overview());
 }
 function renderOverview(keep) {

@@ -1,6 +1,6 @@
 """Cập nhật dữ liệu cho web bằng một lệnh:
 
-  1. Chạy lại notebook HaiChau_Hotspots.ipynb: đọc data/cleaned/data_cleaned.xlsx -> data/web/areas.json
+  1. Chạy lại notebook handovers/HaiChau_Hotspots.ipynb: đọc data/cleaned/data_cleaned.xlsx -> data/web/areas.json
   2. In tóm tắt kết quả; tải lại trang web (Live Server) hoặc deploy lại để thấy dữ liệu mới
 
 Chạy bằng Python của môi trường conda msa:
@@ -21,7 +21,7 @@ def run(*cmd):
 
 def main():
     run(sys.executable, "-m", "jupyter", "nbconvert", "--to", "notebook", "--execute", "--inplace",
-        "--ExecutePreprocessor.kernel_name=msa", "--ExecutePreprocessor.timeout=900", "HaiChau_Hotspots.ipynb")
+        "--ExecutePreprocessor.kernel_name=msa", "--ExecutePreprocessor.timeout=900", "handovers/HaiChau_Hotspots.ipynb")
 
     d = json.loads((ROOT / "data" / "web" / "areas.json").read_text(encoding="utf-8"))
     m = d["meta"]
